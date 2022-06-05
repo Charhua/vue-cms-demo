@@ -1,0 +1,77 @@
+<template>
+  <div class="line-echart">
+    <Echart :options="options"></Echart>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { computed, defineProps, withDefaults } from 'vue';
+import Echart from '@/base-ui/echart/src/Echart.vue';
+//定义props
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    xLabels: string[];
+    values: any[];
+  }>(),
+  {
+    title: ''
+  }
+);
+//初始化echart属性
+
+const options = computed(() => {
+  return {
+    title: {
+      text: props.title
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: '#6a7985'
+        }
+      }
+    },
+    legend: {},
+    toolbox: {
+      feature: {
+        saveAsImage: {}
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        boundaryGap: false,
+        data: props.xLabels
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: '分别销量',
+        type: 'line',
+        stack: '总量',
+        areaStyle: {},
+        emphasis: {
+          focus: 'series'
+        },
+        data: props.values
+      }
+    ]
+  };
+});
+</script>
+
+<style scoped lang="less"></style>
